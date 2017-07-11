@@ -4,5 +4,10 @@ Credentials
 build
 
 .idea/libraries
+workspace.xml
+tasks.xml
 *.iml
+*.ipr
+*.iws
+
 gradle.xml
