@@ -57,7 +57,6 @@ public class VCommand implements CommandInterface {
 
 	@Override
 	public void main(String[] args, MessageReceivedEvent event) {
-		Guild guild = event.getGuild();
 		GuildMusicManager mng = MusicPlayer.getMusicManager(event.getGuild(), event.getTextChannel());
 
 		if (args.length > 0) {
