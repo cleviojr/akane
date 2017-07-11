@@ -77,6 +77,7 @@ public class  Akane{
 		commands.put(".nyaa", new NyaaCommand());
 		commands.put(".channel", new ChCommand());
 		commands.put(".radio", new RadioCommand());
+		commands.put(".pause", new PauseCommand());
 
 	}
 
