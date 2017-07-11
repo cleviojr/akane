@@ -1,0 +1,8 @@
+Credentials
+
+.gradle
+build
+
+.idea/libraries
+*.iml
+gradle.xml
