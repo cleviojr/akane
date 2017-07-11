@@ -57,9 +57,9 @@ public class QCommand implements CommandInterface {
 				MusicPlayer.loadAndPlay(mng, userChannel, args[0], false, false);
 			}
 		} else {
-			String query = String.join(" ", args);
+			Youtube youtube = new Youtube(null, String.join(" ", args));
 			try {
-				String url = Youtube.getFirstResult(query);
+				String url = youtube.getFirstResult().getUrl();
 
 				if (url.contains("&list") || url.contains("playlist?list")) {
 					event.getJDA().addEventListener(new PlListener(event.getGuild(), event.getTextChannel(), url));

@@ -24,6 +24,7 @@ public class TrackScheduler extends AudioEventAdapter {
 	private AudioTrack lastTrack;
 	public TextChannel channel;
 	public boolean radio;
+  private Youtube youtube;
 
 	TrackScheduler(AudioPlayer player, TextChannel channel) {
 		this.player = player;
@@ -32,6 +33,7 @@ public class TrackScheduler extends AudioEventAdapter {
 		this.channel = channel;
 		this.radio = false;
 		this.lastTrack = null;
+		this.youtube = new Youtube();
 	}
 
 	@Override
@@ -42,7 +44,8 @@ public class TrackScheduler extends AudioEventAdapter {
 				String nextTrackUrl;
 				try {
 					GuildMusicManager mng = MusicPlayer.getMusicManager(channel.getGuild(), channel);
-					nextTrackUrl = Youtube.getNextSongUrl(trackUrl);
+					youtube.setUrl(trackUrl);
+					nextTrackUrl = youtube.getNextSongUrl();
 					MusicPlayer.loadAndPlay(mng, channel, nextTrackUrl, false, true);
 				} catch (IOException ignored) {
 				}

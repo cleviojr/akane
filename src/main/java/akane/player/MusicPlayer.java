@@ -46,14 +46,12 @@ public class MusicPlayer {
 		String guildId = guild.getId();
 		GuildMusicManager mng = musicManagers.get(guildId);
 
-		if (mng == null) {
-			mng = musicManagers.get(guildId);
 			if (mng == null) {
 				mng = new GuildMusicManager(musicPlayer, channel);
 				mng.player.setVolume(DEFAULT_VOLUME);
 				musicManagers.put(guildId, mng);
 			}
-		}
+
 		return mng;
 	}
 
