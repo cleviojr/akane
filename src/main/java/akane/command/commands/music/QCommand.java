@@ -1,7 +1,6 @@
 package akane.command.commands.music;
 
 import java.io.IOException;
-import java.util.EventListener;
 import java.util.concurrent.TimeUnit;
 
 import akane.command.core.CommandInterface;
@@ -11,7 +10,7 @@ import akane.player.MusicPlayer;
 import akane.api.Youtube;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
 
 public class QCommand implements CommandInterface {
 	@Override
@@ -22,8 +21,6 @@ public class QCommand implements CommandInterface {
 			messageIsServerCommand(channel);
 			return false;
 		}
-
-		GuildMusicManager mng = MusicPlayer.getMusicManager(event.getGuild(), event.getTextChannel());
 
 		if (args.length == 0) {
 			messageNoArgs(channel);
