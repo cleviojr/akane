@@ -28,7 +28,7 @@ public class NCommand implements CommandInterface {
 		AudioTrack track = player.getPlayingTrack();
 
 		if (track == null) {
-			event.getTextChannel().sendMessage(":no_entry: Nenhuma musica está na fila.").queue();
+			event.getTextChannel().sendMessage(":no_entry: Não estou tocando nada.").queue();
 			return false;
 		}
 		return true;
