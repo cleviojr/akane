@@ -33,8 +33,6 @@ public class QCommand implements CommandInterface {
 		if (!event.getMember().getVoiceState().inVoiceChannel()) {
 			messageOutsideChannel(channel);
 			return false;
-		} else {
-			joinVoiceChannel(event, event.getGuild(), mng);
 		}
 		return true;
 	}
@@ -43,6 +41,14 @@ public class QCommand implements CommandInterface {
 	public void main(String[] args, MessageReceivedEvent event) {
 		GuildMusicManager mng = MusicPlayer.getMusicManager(event.getGuild(), event.getTextChannel());
 		TextChannel userChannel = event.getTextChannel();
+
+		 if (!event.getGuild().getAudioManager().isConnected()){
+			joinVoiceChannel(event, event.getGuild(), mng);
+		}
+
+		if (mng.player.isPaused()) {
+		 	mng.player.setPaused(false);
+		}
 
 		if (mng.scheduler.channel == null)
 			mng.scheduler.channel = userChannel;
