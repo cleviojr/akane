@@ -55,11 +55,15 @@ public class QCommand implements CommandInterface {
 		if (mng.scheduler.radioQueue.size() > 0 && mng.scheduler.radio)
 			mng.scheduler.radioQueue.clear();
 
-		if (args.length == 0) {
+		if (args.length == 1) {
 			try {
 				URL url = new URL(args[0]);
-				if (url.getHost().equalsIgnoreCase("youtube.com") || url.getHost().equalsIgnoreCase("youtu.be") || url.getHost().equalsIgnoreCase("soundcloud.com")) {
-					if ((url.getPath().contains("&list") || url.getPath().contains("playlist?list")) || (args[0].contains("soundcloud") && args[0].contains("/sets/"))) {
+				if (url.getHost().equalsIgnoreCase("www.youtube.com") || url.getHost()
+								.equalsIgnoreCase("youtu.be") || url.getHost()
+								.equalsIgnoreCase("www.soundcloud.com") || url.getHost()
+								.equalsIgnoreCase("youtube.com") || url.getHost()
+								.equalsIgnoreCase("soundcloud.com")) {
+					if ((args[0].contains("&list") || args[0].contains("playlist?list")) || (args[0].contains("soundcloud") && args[0].contains("/sets/"))) {
 						MusicPlayer.loadAndPlay(mng, userChannel, args[0], true, false);
 					} else {
 						MusicPlayer.loadAndPlay(mng, userChannel, args[0], false, false);
@@ -67,12 +71,8 @@ public class QCommand implements CommandInterface {
 				} else {
 					event.getChannel().sendMessage(":no_entry: Aceito apenas links do Youtube ou Soundcloud.").queue(s ->
 									s.delete().queueAfter(5, TimeUnit.SECONDS));
-					try {
-						event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
-					} catch (Exception ignored) {
-					}
 				}
-			} catch (MalformedURLException ignored) {
+			} catch (MalformedURLException y) {
 				youtubeQueue(args, event, mng);
 			}
 		} else {
