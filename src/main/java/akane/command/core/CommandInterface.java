@@ -9,7 +9,7 @@ public interface CommandInterface {
 	boolean isSafe(String[] args, MessageReceivedEvent event);
 	
 	default boolean isHelp(String[] args) {
-		return !isArgsEmpty(args) && isFirstArgHelp(args);
+		return !(args.length == 0) && args[0].equalsIgnoreCase("help");
 	}
 
 	default void status(CommandContainer cmd, boolean success, MessageReceivedEvent event) {
@@ -20,11 +20,4 @@ public interface CommandInterface {
 		event.getChannel().sendMessage(HelpIndex.getHelp(cmd)).queue();
 	}
 
-	static boolean isArgsEmpty(String[] args) {
-		return args.length == 0;
-	}
-	//mudar isso depois
-	static boolean isFirstArgHelp(String[] args) {
-		return args[0].equals("help");
-	}
 }
