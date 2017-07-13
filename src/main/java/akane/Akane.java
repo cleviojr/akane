@@ -38,7 +38,7 @@ public class  Akane{
 		//builder attributes
 		JDABuilder builder;
 		builder = new JDABuilder(AccountType.BOT);
-		builder.setToken(Credentials.DEV_TOKEN);
+		builder.setToken(Credentials.BOT_TOKEN);
 		builder.setAutoReconnect(true);
 		builder.addEventListener(new CommandListener());
 		builder.addEventListener(new StatusListener());

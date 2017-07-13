@@ -46,6 +46,7 @@ public class HelpIndex {
 		help[16] = "Use: .nyaa [sua pesquisa aqui] (Pesquisa um torrent no Nyaa e pega o com mais leechers, entao fornece todas as informações sobre o mesmo e seus links de download).";
 		help[17] = "Use: .channel (define o canal atual como o canal para receber notificações de música).";
 		help[18] = "Use: .radio (habilita ou desabilita o modo de playlist automatico do youtube).";
+		help[19] = "Use: .pause (pausa a música ou retoma se estiver pausada)";
 //		help[19] = "Use: .avatar [nome da pessoa do servidor] (mostra a imagem do avatar da pessoa).";
 		return help[i];
 	}
