@@ -1,6 +1,8 @@
 package akane.command.commands.music;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import akane.command.core.CommandInterface;
@@ -39,12 +41,12 @@ public class QCommand implements CommandInterface {
 		GuildMusicManager mng = MusicPlayer.getMusicManager(event.getGuild(), event.getTextChannel());
 		TextChannel userChannel = event.getTextChannel();
 
-		 if (!event.getGuild().getAudioManager().isConnected()){
+		if (!event.getGuild().getAudioManager().isConnected()) {
 			joinVoiceChannel(event, event.getGuild(), mng);
 		}
 
 		if (mng.player.isPaused()) {
-		 	mng.player.setPaused(false);
+			mng.player.setPaused(false);
 		}
 
 		if (mng.scheduler.channel == null)
@@ -53,27 +55,28 @@ public class QCommand implements CommandInterface {
 		if (mng.scheduler.radioQueue.size() > 0 && mng.scheduler.radio)
 			mng.scheduler.radioQueue.clear();
 
-		if (args[0].contains("http://") || args[0].contains("https://")) {
-			if (args[0].contains("&list") || args[0].contains("playlist?list") || (args[0].contains("soundcloud") && args[0].contains("/sets/"))) {
-				MusicPlayer.loadAndPlay(mng, userChannel, args[0], true, false);
-			} else {
-				MusicPlayer.loadAndPlay(mng, userChannel, args[0], false, false);
+		if (args.length == 0) {
+			try {
+				URL url = new URL(args[0]);
+				if (url.getHost().equalsIgnoreCase("youtube.com") || url.getHost().equalsIgnoreCase("youtu.be") || url.getHost().equalsIgnoreCase("soundcloud.com")) {
+					if ((url.getPath().contains("&list") || url.getPath().contains("playlist?list")) || (args[0].contains("soundcloud") && args[0].contains("/sets/"))) {
+						MusicPlayer.loadAndPlay(mng, userChannel, args[0], true, false);
+					} else {
+						MusicPlayer.loadAndPlay(mng, userChannel, args[0], false, false);
+					}
+				} else {
+					event.getChannel().sendMessage(":no_entry: Aceito apenas links do Youtube ou Soundcloud.").queue(s ->
+									s.delete().queueAfter(5, TimeUnit.SECONDS));
+					try {
+						event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
+					} catch (Exception ignored) {
+					}
+				}
+			} catch (MalformedURLException ignored) {
+				youtubeQueue(args, event, mng);
 			}
 		} else {
-			Youtube youtube = new Youtube(null, String.join(" ", args));
-			try {
-				String url = youtube.getFirstResult().getUrl();
-
-				if (url.contains("&list") || url.contains("playlist?list")) {
-					event.getJDA().addEventListener(new PlListener(event.getGuild(), event.getTextChannel(), url));
-					event.getChannel().sendMessage("Deseja adicionar a playlist: ?").queue();
-				} else {
-					MusicPlayer.loadAndPlay(mng, userChannel, url, false, false);
-				}
-
-			} catch (IOException e) {
-				messageIOException(event.getChannel());
-			}
+			youtubeQueue(args, event, mng);
 		}
 
 		try {
@@ -90,7 +93,7 @@ public class QCommand implements CommandInterface {
 
 	private void messageOutsideChannel(MessageChannel channel) {
 		channel.sendMessage(":no_entry: Voce não esta em um canal de voz"
-		+ "(ou eu não possuo acesso ao seu canal de voz).").queue();
+						+ "(ou eu não possuo acesso ao seu canal de voz).").queue();
 	}
 
 	private void messageIOException(MessageChannel channel) {
@@ -103,5 +106,22 @@ public class QCommand implements CommandInterface {
 
 	private void messageIsServerCommand(MessageChannel channel) {
 		channel.sendMessage(":no_entry: Só uso esse comando em servidores e não no privado.").queue();
+	}
+
+	private void youtubeQueue(String[] args, MessageReceivedEvent event, GuildMusicManager mng) {
+		Youtube youtube = new Youtube(null, String.join(" ", args));
+		try {
+			URL url = youtube.getFirstResult().getUrl();
+
+			if (url.getPath().contains("&list") || url.getPath().contains("playlist?list")) {
+				event.getJDA().addEventListener(new PlListener(event.getGuild(), event.getTextChannel(), url.toString()));
+				event.getChannel().sendMessage(":notes: Uma playlist foi detectada, deseja adicionar a playlist inteira?(s ou n)").queue();
+			} else {
+				MusicPlayer.loadAndPlay(mng, event.getTextChannel(), url.toString(), false, false);
+			}
+
+		} catch (IOException i) {
+			messageIOException(event.getChannel());
+		}
 	}
 }

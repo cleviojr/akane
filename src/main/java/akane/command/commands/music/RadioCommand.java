@@ -18,11 +18,11 @@ public class RadioCommand implements CommandInterface {
 		mng.scheduler.toggleRadio();
 		messageFinished(channel, mng.scheduler.radio);
 		if (mng.scheduler.radio) {
-			if (!mng.scheduler.radioQueue.isEmpty()) {
+			if (mng.player.getPlayingTrack() != null) {
 				Youtube youtube = new Youtube();
 				youtube.setUrl(mng.player.getPlayingTrack().getInfo().uri);
 				try {
-					String nextTrackUrl = youtube.getNextSongUrl();
+					String nextTrackUrl = youtube.getRelated().findFirst().get().getUrl().toString();
 					MusicPlayer.loadAndPlay(mng, channel, nextTrackUrl, false, true);
 				} catch (IOException ignored) {
 				}
