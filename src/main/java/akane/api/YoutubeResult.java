@@ -1,23 +1,21 @@
 package akane.api;
 
-import org.jsoup.select.Elements;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class YoutubeResult {
-	private Elements pageDoc;
-	private String resultUrl;
-	public boolean isPlaylist;
+	private URL resultUrl;
 
-	YoutubeResult(String url, Elements pageDoc) {
-		this.resultUrl = url;
-		this.pageDoc = pageDoc;
+	YoutubeResult(String url) {
+		try {
+			this.resultUrl = new URL(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public String getUrl() {
+	public URL getUrl() {
 		return resultUrl;
 	}
 
-	public boolean isPlaylist() {
-
-		return false;
-	}
 }
