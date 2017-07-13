@@ -1,6 +1,7 @@
 package akane.player;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,18 +22,19 @@ public class TrackScheduler extends AudioEventAdapter {
 	private AudioPlayer player;
 	public final Queue<AudioTrack> queue;
 	public final Queue<AudioTrack> radioQueue;
-	private AudioTrack lastTrack;
+	private List<String> lastTracksUrlList;
 	public TextChannel channel;
 	public boolean radio;
-  private Youtube youtube;
+	private Youtube youtube;
+	private AudioTrack lastTrack;
 
 	TrackScheduler(AudioPlayer player, TextChannel channel) {
 		this.player = player;
 		this.queue = new LinkedList<>();
 		this.radioQueue = new LinkedList<>();
+		this.lastTracksUrlList = new LinkedList<>();
 		this.channel = channel;
 		this.radio = false;
-		this.lastTrack = null;
 		this.youtube = new Youtube();
 	}
 
@@ -40,23 +42,24 @@ public class TrackScheduler extends AudioEventAdapter {
 	public void onTrackStart(AudioPlayer player, AudioTrack track) {
 		String trackUrl = track.getInfo().uri;
 		if (radio && radioQueue.isEmpty()) {
-			if (trackUrl.contains("youtube.")) {
+			if (trackUrl.contains("youtube.com")) {
 				String nextTrackUrl;
 				try {
 					GuildMusicManager mng = MusicPlayer.getMusicManager(channel.getGuild(), channel);
 					youtube.setUrl(trackUrl);
-					nextTrackUrl = youtube.getNextSongUrl();
+					nextTrackUrl = getDifferentNextSongUrl().toString();
 					MusicPlayer.loadAndPlay(mng, channel, nextTrackUrl, false, true);
 				} catch (IOException ignored) {
 				}
 			}
 		}
-
 	}
 
 	@Override
 	public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 		lastTrack = track;
+		lastTracksUrlList.add(lastTrack.getInfo().uri);
+
 		if (endReason.mayStartNext) {
 			trackEndMessage(track, channel);
 			next(channel);
@@ -82,9 +85,8 @@ public class TrackScheduler extends AudioEventAdapter {
 	}
 
 	public void next(TextChannel channel) {
-		if (radio) {
-			nextSong(radioQueue, channel);
-		} else nextSong(queue, channel);
+		if (radio) nextSong(radioQueue, channel);
+		else nextSong(queue, channel);
 	}
 
 	public void shuffle() {
@@ -93,7 +95,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
 	private void trackEndMessage(AudioTrack track, TextChannel channel) {
 		channel.sendMessage(":notes: Terminei de tocar: " + track.getInfo().title + "\nLink: <" + track.getInfo().uri + ">.").queue((message) ->
-		message.delete().queueAfter(track.getDuration() - 1000, TimeUnit.MILLISECONDS));
+						message.delete().queueAfter(track.getDuration() - 1000, TimeUnit.MILLISECONDS));
 	}
 
 	private void messageCurrentSong(AudioTrack track, TextChannel channel) {
@@ -102,12 +104,11 @@ public class TrackScheduler extends AudioEventAdapter {
 		String message = ":notes: Tocando agora: " + player.getPlayingTrack().getInfo().title + "\nLink: <" + url + ">.";
 
 		channel.sendMessage(message).queue((sentMessage) ->
-		sentMessage.delete().queueAfter(trackDuration, TimeUnit.MILLISECONDS));
+						sentMessage.delete().queueAfter(trackDuration, TimeUnit.MILLISECONDS));
 	}
 
 	private void startTrack() {
-		if (radio)
-			player.startTrack(radioQueue.poll(), false);
+		if (radio) player.startTrack(radioQueue.poll(), false);
 		else player.startTrack(queue.poll(), false);
 	}
 
@@ -140,8 +141,22 @@ public class TrackScheduler extends AudioEventAdapter {
 			startTrack();
 			messageCurrentSong(getPlayingTrack(), channel);
 		} else {
+			startTrack();
 			messageFinishedPlaying(channel);
 			leaveVoiceChannel(getGuild(channel));
 		}
 	}
+
+	private boolean alreadyPlayed(String url) {
+		return lastTracksUrlList.contains(url);
+	}
+
+	private URL getDifferentNextSongUrl() throws IOException {
+		return youtube.getRelated()
+						.filter(r -> !alreadyPlayed(r.getUrl().toString()))
+						.filter(r -> !r.getUrl().toString().contains("list="))
+						.findFirst()
+						.get().getUrl();
+	}
+
 }
