@@ -8,7 +8,7 @@ public class CommandContainer {
 	public final String[] args;
 	public final MessageReceivedEvent event;
 
-	CommandContainer(String invoke, String[] args, MessageReceivedEvent e){
+	public CommandContainer(String invoke, String[] args, MessageReceivedEvent e){
 		this.invoke = invoke;
 		this.args = args;
 		this.event = e;
