@@ -1,7 +1,5 @@
 package akane.command.commands.music;
 
-import java.util.concurrent.TimeUnit;
-
 import akane.command.core.CommandInterface;
 import akane.player.GuildMusicManager;
 import akane.player.MusicPlayer;
@@ -28,7 +26,7 @@ public class QclrCommand implements CommandInterface {
 			return false;
 		} else if (!event.getMember().hasPermission(Permission.getPermissions(Permission.ALL_VOICE_PERMISSIONS))) {
 			event.getTextChannel().sendMessage(":no_entry: Você precisa ter todas as permissões de voz para usar este comando.")
-			.queue((message) -> message.delete().queueAfter(10, TimeUnit.SECONDS));
+			.queue();
 			return false;
 		}
 
@@ -41,13 +39,7 @@ public class QclrCommand implements CommandInterface {
 		GuildMusicManager mng = MusicPlayer.getMusicManager(guild, event.getTextChannel());
 
 		mng.scheduler.queue.clear();
-		event.getTextChannel().sendMessage(":notes: Limpei a fila!").queue((message) ->
-		message.delete().queueAfter(10, TimeUnit.SECONDS));
-
-		try {
-			event.getMessage().delete().completeAfter(5, TimeUnit.SECONDS);
-		} catch (Exception ignored) {
-		}
+		event.getTextChannel().sendMessage(":notes: Limpei a fila!").queue();
 
 	}
 

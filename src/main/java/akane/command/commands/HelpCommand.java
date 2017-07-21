@@ -19,7 +19,7 @@ public class HelpCommand implements CommandInterface {
 	public void main(String[] args, MessageReceivedEvent event) {
 		EmbedBuilder helpMessage = new EmbedBuilder();
 		helpMessage.setColor(Color.magenta).setTitle("Lista de comandos")
-		.addField("Musica", ".play [link ou nome]\n.skip\n.shuffle\n.volume\n.sair\n.fila\n.limparfila *\n.channel *\n.radio\n.pause", true)
+		.addField("Musica", ".play [link ou nome]\n.skip\n.shuffle\n.volume\n.sair\n.fila\n.limparfila *\n.channel *\n.radio\n.pause\n.loop", true)
 		.addField("Random", ".cat\n.choose [op1] [op2] [opN]\n.dado [vezes] [faces]\n.waifu", true)
 		.addField("Pesquisa", ".mal [nome]\n.nyaa [nome]", true)
 		.addField("Admin",".clr [n de mensagens]\n.volume [novo volume]*",true)

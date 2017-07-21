@@ -31,7 +31,7 @@ public class HelpIndex {
 		help[4] = "Use: .play [link youtube/soundcloud/twitch ou nome(pesquisa youtube apenas)].\n"
 				+ "(toca uma musica ou playlist, entra no canal de voz automaticamente o bot não estiver ainda).";
 		help[5] = "Use: .skip"
-				+ " (pula pra proxima musica)>";
+				+ " (pula pra proxima musica)";
 		help[6] = "Use: .fila (mostra a fila de musicas na fila).";
 		help[7] = "Use: .shuffle (reordena a fila de forma aleatória).";
 		help[8] = "Use: .limparfila (limpa a fila)(requer permissão).";
@@ -47,7 +47,7 @@ public class HelpIndex {
 		help[17] = "Use: .channel (define o canal atual como o canal para receber notificações de música).";
 		help[18] = "Use: .radio (habilita ou desabilita o modo de playlist automatico do youtube).";
 		help[19] = "Use: .pause (pausa a música ou retoma se estiver pausada)";
-//		help[19] = "Use: .avatar [nome da pessoa do servidor] (mostra a imagem do avatar da pessoa).";
+		help[20] = "Use: .loop (ativa o modo loop).";
 		return help[i];
 	}
 

@@ -38,7 +38,7 @@ public class  Akane{
 		//builder attributes
 		JDABuilder builder;
 		builder = new JDABuilder(AccountType.BOT);
-		builder.setToken(Credentials.BOT_TOKEN);
+		builder.setToken(Credentials.DEV_TOKEN);
 		builder.setAutoReconnect(true);
 		builder.addEventListener(new CommandListener());
 		builder.addEventListener(new StatusListener());
@@ -78,7 +78,7 @@ public class  Akane{
 		commands.put(".channel", new ChCommand());
 		commands.put(".radio", new RadioCommand());
 		commands.put(".pause", new PauseCommand());
-
+		commands.put(".loop", new LoopCommand());
 	}
 
 	public static void handleCommand(CommandContainer cmd) {

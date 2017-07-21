@@ -1,5 +1,7 @@
 package akane.command.commands.music;
 
+import akane.Akane;
+import akane.command.core.CommandContainer;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 
@@ -40,6 +42,9 @@ public class NCommand implements CommandInterface {
 		GuildMusicManager mng = MusicPlayer.getMusicManager(guild, event.getTextChannel());
 
 		mng.scheduler.next(event.getTextChannel());
+		if (mng.scheduler.loop && mng.scheduler.queue.isEmpty()) {
+      Akane.handleCommand(new CommandContainer(".loop", args, event));
+    }
 
 		try {
 			event.getMessage().delete().completeAfter(5, TimeUnit.SECONDS);
@@ -51,4 +56,5 @@ public class NCommand implements CommandInterface {
 	private void notifyServerCommand(MessageChannel channel) {
 		channel.sendMessage(":no_entry: Só uso esse comando em servidores e não no privado.").queue();
 	}
+
 }

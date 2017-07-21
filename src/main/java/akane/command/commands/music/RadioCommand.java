@@ -1,6 +1,8 @@
 package akane.command.commands.music;
 
+import akane.Akane;
 import akane.api.Youtube;
+import akane.command.core.CommandContainer;
 import akane.command.core.CommandInterface;
 import akane.player.GuildMusicManager;
 import akane.player.MusicPlayer;
@@ -29,6 +31,10 @@ public class RadioCommand implements CommandInterface {
 			}
 		} else {
 			mng.scheduler.radioQueue.clear();
+		}
+
+		if (mng.scheduler.loop) {
+			Akane.handleCommand(new CommandContainer(".loop", args, event));
 		}
 
 	}
