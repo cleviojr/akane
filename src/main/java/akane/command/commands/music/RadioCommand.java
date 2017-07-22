@@ -19,6 +19,11 @@ public class RadioCommand implements CommandInterface {
 
 		mng.scheduler.toggleRadio();
 		messageFinished(channel, mng.scheduler.radio);
+
+		if (mng.scheduler.loop) {
+		  Akane.handleCommand(new CommandContainer(".loop", args, event));
+    }
+
 		if (mng.scheduler.radio) {
 			if (mng.player.getPlayingTrack() != null) {
 				Youtube youtube = new Youtube();
