@@ -44,7 +44,7 @@ public class QsCommand implements CommandInterface{
 		message.delete().queueAfter(5, TimeUnit.SECONDS));
 
 		try {
-			event.getMessage().delete().completeAfter(5, TimeUnit.SECONDS);
+			event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 		} catch (Exception ignored) {
 		}
 	}

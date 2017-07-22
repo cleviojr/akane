@@ -56,7 +56,7 @@ public class LqCommand implements CommandInterface {
         event.getTextChannel().sendMessage(sb.toString()).queue((message) -> message.delete().queueAfter(5, TimeUnit.MINUTES));
 
         try {
-            event.getMessage().delete().completeAfter(5, TimeUnit.SECONDS);
+            event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
         } catch (Exception ignored) {
         }
 

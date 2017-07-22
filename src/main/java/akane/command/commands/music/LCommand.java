@@ -42,7 +42,7 @@ public class LCommand implements CommandInterface {
 		event.getTextChannel().sendMessage(":notes: Saí do canal de voz: #" + channelName + ".").queue();
 
 		try {
-			event.getMessage().delete().completeAfter(5, TimeUnit.SECONDS);
+			event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 		} catch (Exception ignored) {
 		}
 
