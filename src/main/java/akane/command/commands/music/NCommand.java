@@ -48,7 +48,7 @@ public class NCommand implements CommandInterface {
 		mng.scheduler.next(event.getTextChannel());
 
 		try {
-			event.getMessage().delete().completeAfter(5, TimeUnit.SECONDS);
+			event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 		} catch (Exception ignored) {
 		}
 
