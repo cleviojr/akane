@@ -113,11 +113,21 @@ public class QCommand implements CommandInterface {
 		try {
 			URL url = youtube.getFirstResult().getUrl();
 
-			if (url.getPath().contains("&list") || url.getPath().contains("playlist?list")) {
-				event.getJDA().addEventListener(new PlListener(event.getGuild(), event.getTextChannel(), url.toString()));
-				event.getChannel().sendMessage(":notes: Uma playlist foi detectada, deseja adicionar a playlist inteira?(s ou n)").queue();
+			if (url.getQuery().contains("list=") || url.getQuery().contains("playlist?list")) {
+        event
+        .getChannel()
+        .sendMessage(":notes: `Uma playlist foi detectada, deseja adicionar a" +
+                          " playlist inteira(s ou n)?`\n`Você tem 5 segundos!`"      )
+        .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+
+				event
+        .getJDA()
+        .addEventListener(new PlListener(event.getGuild(), event.getTextChannel(),
+                                         url.toString(), event.getAuthor())     );
 			} else {
-				MusicPlayer.loadAndPlay(mng, event.getTextChannel(), url.toString(), false, false);
+				MusicPlayer.loadAndPlay(mng, event.getTextChannel(),
+                                url.toString(), false,
+                                false                   );
 			}
 
 		} catch (IOException i) {
