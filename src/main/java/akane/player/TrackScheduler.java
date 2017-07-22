@@ -140,10 +140,6 @@ public class TrackScheduler extends AudioEventAdapter {
   }
 
   private void nextSong(Queue queue, TextChannel channel) {
-    loop = !loop;
-    channel.sendMessage(":notes: Desativei o loop!")
-            .queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-
     if (!queue.isEmpty()) {
       startTrack();
       messageCurrentSong(getPlayingTrack(), channel);
