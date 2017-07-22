@@ -41,10 +41,11 @@ public class NCommand implements CommandInterface {
 		Guild guild = event.getGuild();
 		GuildMusicManager mng = MusicPlayer.getMusicManager(guild, event.getTextChannel());
 
+		if (mng.scheduler.loop) {
+			Akane.handleCommand(new CommandContainer(".loop", args, event));
+		}
+
 		mng.scheduler.next(event.getTextChannel());
-		if (mng.scheduler.loop && mng.scheduler.queue.isEmpty()) {
-      Akane.handleCommand(new CommandContainer(".loop", args, event));
-    }
 
 		try {
 			event.getMessage().delete().completeAfter(5, TimeUnit.SECONDS);
