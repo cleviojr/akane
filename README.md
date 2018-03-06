@@ -1,4 +1,4 @@
-# java version for Akane.
+# Akane's java version.
 
 6 March 2018: the project is deprecated.<br />
 I do not recommend anyone to read, copy, download or learn anything from this code.<br />
